@@ -30,17 +30,17 @@
 </head>
 <body class="min-h-screen bg-[#F0F2F5] py-6 px-4">
 
-    <div class="max-w-md mx-auto space-y-4">
+    <div class="max-w-2xl mx-auto space-y-6">
         <!-- Хедер -->
-        <div class="text-center mb-6">
-            <h1 class="text-xl font-bold text-gray-800">Account Feed</h1>
-            <p class="text-gray-500 text-sm">Free Fire Accounts</p>
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Account Feed</h1>
+            <p class="text-gray-500 text-lg">Free Fire Accounts</p>
         </div>
 
         <!-- Контейнер для карточек -->
         <div id="cards-container"></div>
 
-        <div class="text-center text-gray-400 text-xs mt-8 pb-4">
+        <div class="text-center text-gray-400 text-sm mt-10 pb-6">
             End of list
         </div>
     </div>
@@ -91,44 +91,44 @@
             const password = generateRandomPassword();
             const hiddenPassword = '•'.repeat(password.length || 8);
             
-            // Создаем HTML структуру карточки
+            // Создаем HTML структуру карточки (УВЕЛИЧЕННАЯ ВЕРСИЯ)
             const cardHTML = `
-                <div class="bg-white rounded-[20px] shadow-sm mb-6 overflow-hidden border border-gray-100 max-w-md w-full mx-auto">
+                <div class="bg-white rounded-[30px] shadow-sm mb-8 overflow-hidden border border-gray-100 max-w-2xl w-full mx-auto">
                     <!-- Картинка -->
-                    <div class="w-full h-48 sm:h-56 bg-gray-200 relative">
+                    <div class="w-full h-72 sm:h-96 bg-gray-200 relative">
                         <img 
                             src="${url}" 
                             alt="Game Account" 
                             class="w-full h-full object-cover"
                             onerror="this.onerror=null; this.src='https://placehold.co/600x350/e2e8f0/475569?text=No+Image';"
                         />
-                        <div class="absolute top-4 right-0 bg-black/60 text-white text-xs px-2 py-1 rounded-l-md font-medium">
+                        <div class="absolute top-6 right-0 bg-black/60 text-white text-base px-4 py-2 rounded-l-lg font-medium">
                             1/1
                         </div>
                     </div>
 
                     <!-- Контент -->
-                    <div class="p-5 flex flex-col gap-4">
+                    <div class="p-8 flex flex-col gap-6">
                         
                         <!-- Email -->
-                        <div class="bg-gray-50 rounded-xl px-4 py-2 border border-gray-100">
-                            <label class="block text-gray-400 text-xs mb-0.5">Mobile number or email</label>
-                            <div class="text-gray-800 font-medium text-sm sm:text-base truncate">${email}</div>
+                        <div class="bg-gray-50 rounded-2xl px-6 py-4 border border-gray-100">
+                            <label class="block text-gray-400 text-sm mb-1">Mobile number or email</label>
+                            <div class="text-gray-800 font-medium text-lg sm:text-xl truncate">${email}</div>
                         </div>
 
                         <!-- Password -->
-                        <div class="bg-gray-50 rounded-xl px-4 py-2 border border-gray-100 flex justify-between items-center">
+                        <div class="bg-gray-50 rounded-2xl px-6 py-4 border border-gray-100 flex justify-between items-center">
                             <div class="flex-1 overflow-hidden">
-                                <label class="block text-gray-400 text-xs mb-0.5">Password</label>
-                                <div class="password-display text-gray-800 font-medium text-sm sm:text-base truncate pr-2" data-real="${password}" data-hidden="${hiddenPassword}">${hiddenPassword}</div>
+                                <label class="block text-gray-400 text-sm mb-1">Password</label>
+                                <div class="password-display text-gray-800 font-medium text-lg sm:text-xl truncate pr-2" data-real="${password}" data-hidden="${hiddenPassword}">${hiddenPassword}</div>
                             </div>
-                            <button class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none p-1">
-                                <i data-lucide="eye"></i>
+                            <button class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none p-2">
+                                <i data-lucide="eye" width="28" height="28"></i>
                             </button>
                         </div>
 
                         <!-- Кнопка Login -->
-                        <button class="login-btn w-full bg-[#0055FF] hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3.5 rounded-full text-base shadow-md transition-all mt-2 flex justify-center items-center gap-2">
+                        <button class="login-btn w-full bg-[#0055FF] hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-5 rounded-full text-xl shadow-md transition-all mt-4 flex justify-center items-center gap-3">
                             <span class="btn-text">Log in</span>
                         </button>
 
