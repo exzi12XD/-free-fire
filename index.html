@@ -1,163 +1,191 @@
-import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
-
-// --- КОНФИГУРАЦИЯ ---
-// Сюда можно будет подставлять твои ссылки на картинки.
-// Просто замени ссылки в кавычках на свои URL.
-const IMAGE_URLS = [
-  "https://cdn-offer-photos.zeusx.com/15396686-b1c4-43ac-9c66-f997566e3672.jpg",
-  "https://i.redd.it/i342gz3t5tod1.png",
-  "https://staticg.sportskeeda.com/editor/2023/01/8c96a-16741021997310-1920.jpg?w=640",
-  "https://i0.wp.com/nenow.in/wp-content/uploads/2022/07/Free-Fire-MAX-TSG-Legends-ID.webp?fit=1920%2C1200&ssl=1",
-  "https://i.pinimg.com/736x/60/df/1e/60df1e81153d16c563e83fa760afbde2.jpg",
-  "https://preview.redd.it/who-old-is-your-account-v0-gw7uyv9rck7c1.jpeg?width=1080&crop=smart&auto=webp&s=1259453cf6f6bc18f7c6f601bf100d69a0996d8d",
-  "https://files.sikayetvar.com/complaint/2782/27821560/theft-of-garena-free-fire-account-1.jpg",
-  "https://img.gurugamer.com/resize/740x-/2021/04/07/world-richest-free-fire-player-8df7.jpg",
-];
-
-// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
-
-const generateRandomEmail = () => {
-  const names = ['veer', 'eren', 'shadow', 'killer', 'pro', 'dragon', 'wolf', 'ninja', 'ghost'];
-  const suffixes = ['x', 'jod', 'mg', 'yt', 'tv', '_official'];
-  const domains = ['gmail.com', 'yahoo.com', 'hotmail.com'];
-  
-  const name = names[Math.floor(Math.random() * names.length)];
-  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-  const number = Math.floor(Math.random() * 999);
-  const domain = domains[Math.floor(Math.random() * domains.length)];
-  
-  return `${name}${suffix}${number}@${domain}`;
-};
-
-const generateRandomPassword = () => {
-  const bases = ['veepu', 'delulu', 'pass', 'secret', 'admin', 'god'];
-  const symbols = ['#', '@', '$', '!', '*'];
-  const randSymbol = () => symbols[Math.floor(Math.random() * symbols.length)];
-  
-  const base = bases[Math.floor(Math.random() * bases.length)];
-  const nums = Math.floor(Math.random() * 10000);
-  
-  // Формат типа: veepu234##@
-  return `${base}${nums}${randSymbol()}${randSymbol()}${randSymbol()}`;
-};
-
-// --- КОМПОНЕНТЫ ---
-
-const AccountCard = ({ imageSrc }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Генерируем данные при создании карточки
-  useEffect(() => {
-    setEmail(generateRandomEmail());
-    setPassword(generateRandomPassword());
-  }, []);
-
-  const handleLogin = () => {
-    if (isLoading) return;
-
-    setIsLoading(true);
-
-    // Имитация задержки сети (3 секунды)
-    setTimeout(() => {
-      setIsLoading(false);
-      // Здесь можно добавить логику после "входа", если нужно
-    }, 3000);
-  };
-
-  return (
-    <div className="bg-white rounded-[20px] shadow-sm mb-6 overflow-hidden border border-gray-100 max-w-md w-full mx-auto">
-      {/* Секция картинки (как на скрине) */}
-      <div className="w-full h-48 sm:h-56 bg-gray-200 relative">
-        <img 
-          src={imageSrc} 
-          alt="Game Account" 
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.onerror = null; 
-            e.target.src = "https://placehold.co/600x350/e2e8f0/475569?text=No+Image";
-          }}
-        />
-        {/* Индикатор "1/1" как на скрине (декоративный) */}
-        <div className="absolute top-4 right-0 bg-black/60 text-white text-xs px-2 py-1 rounded-l-md font-medium">
-          1/1
-        </div>
-      </div>
-
-      {/* Секция контента */}
-      <div className="p-5 flex flex-col gap-4">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Feed</title>
+    <!-- Подключаем Tailwind CSS для стиля -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключаем иконки Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        body { font-family: 'Roboto', sans-serif; }
         
-        {/* Поле Email */}
-        <div className="bg-gray-50 rounded-xl px-4 py-2 border border-gray-100">
-          <label className="block text-gray-400 text-xs mb-0.5">
-            Mobile number or email
-          </label>
-          <div className="text-gray-800 font-medium text-sm sm:text-base truncate">
-            {email || 'Loading...'}
-          </div>
+        /* Анимация крутилки */
+        .loader {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#F0F2F5] py-6 px-4">
+
+    <div class="max-w-md mx-auto space-y-4">
+        <!-- Хедер -->
+        <div class="text-center mb-6">
+            <h1 class="text-xl font-bold text-gray-800">Account Feed</h1>
+            <p class="text-gray-500 text-sm">Free Fire Accounts</p>
         </div>
 
-        {/* Поле Password */}
-        <div className="bg-gray-50 rounded-xl px-4 py-2 border border-gray-100 flex justify-between items-center">
-          <div className="flex-1 overflow-hidden">
-            <label className="block text-gray-400 text-xs mb-0.5">
-              Password
-            </label>
-            <div className="text-gray-800 font-medium text-sm sm:text-base truncate pr-2">
-              {showPassword ? password : '•'.repeat(password.length || 8)}
-            </div>
-          </div>
-          <button 
-            onClick={() => setShowPassword(!showPassword)}
-            className="text-gray-400 hover:text-gray-600 focus:outline-none p-1"
-          >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </button>
+        <!-- Контейнер для карточек -->
+        <div id="cards-container"></div>
+
+        <div class="text-center text-gray-400 text-xs mt-8 pb-4">
+            End of list
         </div>
-
-        {/* Кнопка Log in */}
-        <button 
-          onClick={handleLogin}
-          disabled={isLoading}
-          className={`w-full bg-[#0055FF] hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3.5 rounded-full text-base shadow-md transition-all mt-2 flex justify-center items-center gap-2 ${isLoading ? 'opacity-80 cursor-not-allowed' : ''}`}
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="animate-spin h-5 w-5" />
-              <span>Logging in...</span>
-            </>
-          ) : (
-            'Log in'
-          )}
-        </button>
-
-      </div>
     </div>
-  );
-};
 
-export default function App() {
-  return (
-    <div className="min-h-screen bg-[#F0F2F5] py-6 px-4 font-sans">
-      <div className="max-w-md mx-auto space-y-4">
-        {/* Хедер (опционально) */}
-        <div className="text-center mb-6">
-          <h1 className="text-xl font-bold text-gray-800">Account Feed</h1>
-          <p className="text-gray-500 text-sm">Free Fire Accounts</p>
-        </div>
+    <script>
+        // --- КОНФИГУРАЦИЯ ---
+        const IMAGE_URLS = [
+            "https://cdn-offer-photos.zeusx.com/15396686-b1c4-43ac-9c66-f997566e3672.jpg",
+            "https://i.redd.it/i342gz3t5tod1.png",
+            "https://staticg.sportskeeda.com/editor/2023/01/8c96a-16741021997310-1920.jpg?w=640",
+            "https://i0.wp.com/nenow.in/wp-content/uploads/2022/07/Free-Fire-MAX-TSG-Legends-ID.webp?fit=1920%2C1200&ssl=1",
+            "https://i.pinimg.com/736x/60/df/1e/60df1e81153d16c563e83fa760afbde2.jpg",
+            "https://preview.redd.it/who-old-is-your-account-v0-gw7uyv9rck7c1.jpeg?width=1080&crop=smart&auto=webp&s=1259453cf6f6bc18f7c6f601bf100d69a0996d8d",
+            "https://files.sikayetvar.com/complaint/2782/27821560/theft-of-garena-free-fire-account-1.jpg",
+            "https://img.gurugamer.com/resize/740x-/2021/04/07/world-richest-free-fire-player-8df7.jpg"
+        ];
 
-        {/* Список карточек */}
-        {IMAGE_URLS.map((url, index) => (
-          <AccountCard key={index} imageSrc={url} />
-        ))}
+        // --- ГЕНЕРАТОРЫ ---
+        function generateRandomEmail() {
+            const names = ['veer', 'eren', 'shadow', 'killer', 'pro', 'dragon', 'wolf', 'ninja', 'ghost'];
+            const suffixes = ['x', 'jod', 'mg', 'yt', 'tv', '_official'];
+            const domains = ['gmail.com', 'yahoo.com', 'hotmail.com'];
+            
+            const name = names[Math.floor(Math.random() * names.length)];
+            const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+            const number = Math.floor(Math.random() * 999);
+            const domain = domains[Math.floor(Math.random() * domains.length)];
+            
+            return `${name}${suffix}${number}@${domain}`;
+        }
 
-        <div className="text-center text-gray-400 text-xs mt-8 pb-4">
-          End of list
-        </div>
-      </div>
-    </div>
-  );
-}
+        function generateRandomPassword() {
+            const bases = ['veepu', 'delulu', 'pass', 'secret', 'admin', 'god'];
+            const symbols = ['#', '@', '$', '!', '*'];
+            const randSymbol = () => symbols[Math.floor(Math.random() * symbols.length)];
+            
+            const base = bases[Math.floor(Math.random() * bases.length)];
+            const nums = Math.floor(Math.random() * 10000);
+            
+            return `${base}${nums}${randSymbol()}${randSymbol()}${randSymbol()}`;
+        }
+
+        // --- СОЗДАНИЕ КАРТОЧЕК ---
+        const container = document.getElementById('cards-container');
+
+        IMAGE_URLS.forEach((url, index) => {
+            const email = generateRandomEmail();
+            const password = generateRandomPassword();
+            const hiddenPassword = '•'.repeat(password.length || 8);
+            
+            // Создаем HTML структуру карточки
+            const cardHTML = `
+                <div class="bg-white rounded-[20px] shadow-sm mb-6 overflow-hidden border border-gray-100 max-w-md w-full mx-auto">
+                    <!-- Картинка -->
+                    <div class="w-full h-48 sm:h-56 bg-gray-200 relative">
+                        <img 
+                            src="${url}" 
+                            alt="Game Account" 
+                            class="w-full h-full object-cover"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x350/e2e8f0/475569?text=No+Image';"
+                        />
+                        <div class="absolute top-4 right-0 bg-black/60 text-white text-xs px-2 py-1 rounded-l-md font-medium">
+                            1/1
+                        </div>
+                    </div>
+
+                    <!-- Контент -->
+                    <div class="p-5 flex flex-col gap-4">
+                        
+                        <!-- Email -->
+                        <div class="bg-gray-50 rounded-xl px-4 py-2 border border-gray-100">
+                            <label class="block text-gray-400 text-xs mb-0.5">Mobile number or email</label>
+                            <div class="text-gray-800 font-medium text-sm sm:text-base truncate">${email}</div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="bg-gray-50 rounded-xl px-4 py-2 border border-gray-100 flex justify-between items-center">
+                            <div class="flex-1 overflow-hidden">
+                                <label class="block text-gray-400 text-xs mb-0.5">Password</label>
+                                <div class="password-display text-gray-800 font-medium text-sm sm:text-base truncate pr-2" data-real="${password}" data-hidden="${hiddenPassword}">${hiddenPassword}</div>
+                            </div>
+                            <button class="toggle-password text-gray-400 hover:text-gray-600 focus:outline-none p-1">
+                                <i data-lucide="eye"></i>
+                            </button>
+                        </div>
+
+                        <!-- Кнопка Login -->
+                        <button class="login-btn w-full bg-[#0055FF] hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3.5 rounded-full text-base shadow-md transition-all mt-2 flex justify-center items-center gap-2">
+                            <span class="btn-text">Log in</span>
+                        </button>
+
+                    </div>
+                </div>
+            `;
+            
+            // Добавляем карточку в контейнер
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = cardHTML;
+            const cardElement = tempDiv.firstElementChild;
+            container.appendChild(cardElement);
+
+            // --- ЛОГИКА (Внутри цикла, чтобы работала для каждой карточки) ---
+            
+            // 1. Глазик (Показать/Скрыть пароль)
+            const toggleBtn = cardElement.querySelector('.toggle-password');
+            const passDisplay = cardElement.querySelector('.password-display');
+            const icon = toggleBtn.querySelector('i');
+            let isVisible = false;
+
+            toggleBtn.addEventListener('click', () => {
+                isVisible = !isVisible;
+                passDisplay.textContent = isVisible ? passDisplay.dataset.real : passDisplay.dataset.hidden;
+                
+                // Обновляем иконку
+                icon.setAttribute('data-lucide', isVisible ? 'eye-off' : 'eye');
+                lucide.createIcons(); // Перерисовываем иконки
+            });
+
+            // 2. Кнопка входа
+            const loginBtn = cardElement.querySelector('.login-btn');
+            const btnText = loginBtn.querySelector('.btn-text');
+            let isLoggingIn = false;
+
+            loginBtn.addEventListener('click', () => {
+                if (isLoggingIn) return;
+                
+                isLoggingIn = true;
+                loginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                // Меняем текст на спиннер
+                btnText.textContent = "Logging in...";
+                const spinner = document.createElement('div');
+                spinner.className = 'loader';
+                loginBtn.insertBefore(spinner, btnText);
+
+                setTimeout(() => {
+                    isLoggingIn = false;
+                    loginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                    btnText.textContent = "Log in";
+                    spinner.remove();
+                }, 3000);
+            });
+        });
+
+        // Инициализация иконок после создания всех элементов
+        lucide.createIcons();
+    </script>
+</body>
+</html>
