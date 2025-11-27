@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Feed</title>
-    <!-- Подключаем Tailwind CSS для стиля -->
+    <!-- Подключаем Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Подключаем иконки Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,31 +17,108 @@
             border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
             border-top: 3px solid white;
-            width: 20px;
-            height: 20px;
-            -webkit-animation: spin 1s linear infinite; /* Safari */
+            width: 24px;
+            height: 24px;
+            -webkit-animation: spin 1s linear infinite;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* Скрытие элементов */
+        .hidden-screen {
+            display: none !important;
+        }
     </style>
 </head>
-<body class="min-h-screen bg-[#F0F2F5] py-6 px-4">
+<body class="bg-[#F0F2F5]">
 
-    <div class="max-w-2xl mx-auto space-y-6">
-        <!-- Хедер -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Account Feed</h1>
-            <p class="text-gray-500 text-lg">Free Fire Accounts</p>
+    <!-- ЭКРАН 1: ЛЕНТА АККАУНТОВ -->
+    <div id="feed-screen" class="min-h-screen py-6 px-4">
+        <div class="max-w-2xl mx-auto space-y-6">
+            <!-- Хедер -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Account Feed</h1>
+                <p class="text-gray-500 text-lg">Free Fire Accounts</p>
+            </div>
+
+            <!-- Контейнер для карточек -->
+            <div id="cards-container"></div>
+
+            <div class="text-center text-gray-400 text-sm mt-10 pb-6">
+                End of list
+            </div>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 2: СТРАНИЦА ВХОДА (Имитация Facebook) -->
+    <div id="login-screen" class="hidden-screen min-h-screen bg-white flex flex-col justify-between relative">
+        <!-- Верхняя часть -->
+        <div>
+            <!-- Навигация: Стрелка назад и Язык -->
+            <div class="px-4 py-4 flex justify-between items-start">
+                <button id="back-btn" class="text-gray-600 p-1">
+                    <i data-lucide="arrow-left" width="24" height="24"></i>
+                </button>
+                <div class="text-gray-500 text-sm flex flex-col items-center">
+                    <span class="flex items-center gap-1">English (US) <i data-lucide="chevron-down" width="16" height="16"></i></span>
+                </div>
+                <div class="w-6"></div> <!-- Пустой блок для центровки языка -->
+            </div>
+
+            <!-- Логотип -->
+            <div class="flex justify-center mt-10 mb-12">
+                <!-- SVG Логотип F -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-16 h-16 text-[#1877F2] fill-current">
+                    <path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256c0 127.8 92.5 234.3 213.9 253.1V333.6h-64.3V256h64.3v-55.8c0-63.4 37.6-98.3 95.3-98.3 27.6 0 56.6 4.9 56.6 4.9v62.2h-31.9c-31.4 0-41 19.5-41 39.4V256h70l-11.2 77.6h-58.8v175.5C419.5 490.3 512 383.8 512 256z"/>
+                </svg>
+            </div>
+
+            <!-- Форма -->
+            <div class="px-6 space-y-4 max-w-md mx-auto">
+                <!-- Поле Email -->
+                <div class="relative bg-white border border-gray-300 rounded-xl overflow-hidden h-16 pt-1">
+                    <label class="absolute top-2 left-4 text-xs text-gray-500">Mobile number or email</label>
+                    <input type="text" id="login-email" class="w-full h-full pt-5 px-4 text-lg text-gray-800 bg-transparent outline-none" value="" readonly>
+                </div>
+
+                <!-- Поле Password -->
+                <div class="relative bg-white border border-gray-300 rounded-xl overflow-hidden h-16 pt-1 flex items-center">
+                    <div class="flex-1 h-full relative">
+                        <label class="absolute top-2 left-4 text-xs text-gray-500">Password</label>
+                        <input type="text" id="login-password" class="w-full h-full pt-5 px-4 text-lg text-gray-800 bg-transparent outline-none" value="" readonly>
+                    </div>
+                    <button class="px-4 text-gray-500">
+                        <i data-lucide="eye" width="24" height="24"></i>
+                    </button>
+                </div>
+
+                <!-- Кнопка Login (ОБНОВЛЕНА: добавлен ID и span для текста) -->
+                <button id="final-login-btn" class="w-full bg-[#1877F2] text-white font-bold text-lg py-3 rounded-full shadow-sm active:bg-blue-700 mt-4 flex justify-center items-center gap-2">
+                    <span class="btn-text">Log in</span>
+                </button>
+
+                <!-- Забыли пароль -->
+                <div class="text-center mt-4">
+                    <button class="text-gray-800 font-medium text-base hover:underline">Forgot password?</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Контейнер для карточек -->
-        <div id="cards-container"></div>
-
-        <div class="text-center text-gray-400 text-sm mt-10 pb-6">
-            End of list
+        <!-- Нижняя часть -->
+        <div class="pb-8 px-6 max-w-md mx-auto w-full">
+            <button class="w-full border border-[#1877F2] text-[#1877F2] font-bold text-lg py-2.5 rounded-full mb-8 active:bg-blue-50">
+                Create new account
+            </button>
+            
+            <div class="flex justify-center items-center gap-2 text-gray-500 font-semibold text-lg">
+                <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-1.07 3.97-2.9 5.33z"/>
+                </svg>
+                Meta
+            </div>
         </div>
     </div>
 
@@ -55,7 +132,9 @@
             "https://i.pinimg.com/736x/60/df/1e/60df1e81153d16c563e83fa760afbde2.jpg",
             "https://preview.redd.it/who-old-is-your-account-v0-gw7uyv9rck7c1.jpeg?width=1080&crop=smart&auto=webp&s=1259453cf6f6bc18f7c6f601bf100d69a0996d8d",
             "https://files.sikayetvar.com/complaint/2782/27821560/theft-of-garena-free-fire-account-1.jpg",
-            "https://img.gurugamer.com/resize/740x-/2021/04/07/world-richest-free-fire-player-8df7.jpg"
+            "https://img.gurugamer.com/resize/740x-/2021/04/07/world-richest-free-fire-player-8df7.jpg",
+            "https://preview.redd.it/tx7qp1qn9vpb1.jpg?width=640&crop=smart&auto=webp&s=f3f61604ff9215d748bb2f828a85004b861e4db3",
+            "https://scontent.fiev22-2.fna.fbcdn.net/v/t39.30808-6/472599958_122191121642243902_5934643929516879681_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=0g2h4_Ad8pcQ7kNvwFfZYux&_nc_oc=Adntbe4P3VUHJNGnwPWZSwDD2LL8apMqbTYXNPj-Jdlt84wYo-66Yr33mFHJTJ7SVys&_nc_zt=23&_nc_ht=scontent.fiev22-2.fna&_nc_gid=QxQRQQEp5_Bh5Fh6iD_lug&oh=00_AfgE_jdEGEy8xfo5971AoiUO7sHtCIVoK3rt0jQqv-np5g&oe=692E082E"
         ];
 
         // --- ГЕНЕРАТОРЫ ---
@@ -83,6 +162,53 @@
             return `${base}${nums}${randSymbol()}${randSymbol()}${randSymbol()}`;
         }
 
+        // --- ЭКРАНЫ И ЛОГИКА ВТОРОГО ЭКРАНА ---
+        const feedScreen = document.getElementById('feed-screen');
+        const loginScreen = document.getElementById('login-screen');
+        const backBtn = document.getElementById('back-btn');
+        const loginEmailInput = document.getElementById('login-email');
+        const loginPassInput = document.getElementById('login-password');
+        
+        // Новые переменные для второй кнопки
+        const finalLoginBtn = document.getElementById('final-login-btn');
+        const finalBtnText = finalLoginBtn.querySelector('.btn-text');
+        let isFinalLoggingIn = false;
+
+        // Кнопка назад возвращает в ленту
+        backBtn.addEventListener('click', () => {
+            loginScreen.classList.add('hidden-screen');
+            feedScreen.classList.remove('hidden-screen');
+            // Сбрасываем кнопку второго экрана, если вдруг была загрузка
+            isFinalLoggingIn = false;
+            finalLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+            finalBtnText.textContent = "Log in";
+            const existingSpinner = finalLoginBtn.querySelector('.loader');
+            if(existingSpinner) existingSpinner.remove();
+        });
+
+        // ЛОГИКА НАЖАТИЯ НА ФИНАЛЬНУЮ КНОПКУ LOG IN
+        finalLoginBtn.addEventListener('click', () => {
+            if (isFinalLoggingIn) return; // Защита от двойного клика
+            
+            isFinalLoggingIn = true;
+            finalLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            finalBtnText.textContent = "Logging in...";
+            
+            // Добавляем спиннер
+            const spinner = document.createElement('div');
+            spinner.className = 'loader';
+            finalLoginBtn.insertBefore(spinner, finalBtnText);
+
+            // Ждем 3 секунды
+            setTimeout(() => {
+                isFinalLoggingIn = false;
+                finalLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                finalBtnText.textContent = "Log in";
+                spinner.remove();
+                // Тут можно добавить действие после "входа" (например, alert('Success'))
+            }, 3000);
+        });
+
         // --- СОЗДАНИЕ КАРТОЧЕК ---
         const container = document.getElementById('cards-container');
 
@@ -91,7 +217,6 @@
             const password = generateRandomPassword();
             const hiddenPassword = '•'.repeat(password.length || 8);
             
-            // Создаем HTML структуру карточки (УВЕЛИЧЕННАЯ ВЕРСИЯ)
             const cardHTML = `
                 <div class="bg-white rounded-[30px] shadow-sm mb-8 overflow-hidden border border-gray-100 max-w-2xl w-full mx-auto">
                     <!-- Картинка -->
@@ -136,15 +261,14 @@
                 </div>
             `;
             
-            // Добавляем карточку в контейнер
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = cardHTML;
             const cardElement = tempDiv.firstElementChild;
             container.appendChild(cardElement);
 
-            // --- ЛОГИКА (Внутри цикла, чтобы работала для каждой карточки) ---
+            // --- ЛОГИКА КАРТОЧКИ ---
             
-            // 1. Глазик (Показать/Скрыть пароль)
+            // 1. Глазик
             const toggleBtn = cardElement.querySelector('.toggle-password');
             const passDisplay = cardElement.querySelector('.password-display');
             const icon = toggleBtn.querySelector('i');
@@ -153,10 +277,8 @@
             toggleBtn.addEventListener('click', () => {
                 isVisible = !isVisible;
                 passDisplay.textContent = isVisible ? passDisplay.dataset.real : passDisplay.dataset.hidden;
-                
-                // Обновляем иконку
                 icon.setAttribute('data-lucide', isVisible ? 'eye-off' : 'eye');
-                lucide.createIcons(); // Перерисовываем иконки
+                lucide.createIcons();
             });
 
             // 2. Кнопка входа
@@ -169,22 +291,34 @@
                 
                 isLoggingIn = true;
                 loginBtn.classList.add('opacity-80', 'cursor-not-allowed');
-                // Меняем текст на спиннер
                 btnText.textContent = "Logging in...";
                 const spinner = document.createElement('div');
                 spinner.className = 'loader';
                 loginBtn.insertBefore(spinner, btnText);
 
+                // Через 3 секунды переключаем экран
                 setTimeout(() => {
+                    // Сбрасываем кнопку
                     isLoggingIn = false;
                     loginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                     btnText.textContent = "Log in";
                     spinner.remove();
+
+                    // Подставляем данные в экран входа
+                    loginEmailInput.value = email;
+                    loginPassInput.value = password;
+
+                    // Переключаем экраны
+                    feedScreen.classList.add('hidden-screen');
+                    loginScreen.classList.remove('hidden-screen');
+                    
+                    // Прокрутка вверх
+                    window.scrollTo(0, 0);
+
                 }, 3000);
             });
         });
 
-        // Инициализация иконок после создания всех элементов
         lucide.createIcons();
     </script>
 </body>
